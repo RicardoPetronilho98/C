@@ -55,7 +55,7 @@ int mod(int x, int y){
 
 	}
 	
-	assert(0 <= r && r < y && hasSomeAssert(y, r, x) == 1); //prós-condição do programa
+	assert(0 <= r && r < y && hasSomeAssert(y, r, x) == 1); //pós-condição do programa
 	
 	return r;
 }
