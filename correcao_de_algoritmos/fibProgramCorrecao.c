@@ -39,7 +39,7 @@ void programa(int n){
 	
 	while (n > 1) {
 
-		assert(x == fib (n0 - n + 1) && y == fib (n0 - n) && n >= 1); //Invariante
+		assert(x == fib (n0 - n + 1) && y == fib (n0 - n) && n >= 1); // Invariante
 		
 		x = x + y; 
 		y = x - y; 

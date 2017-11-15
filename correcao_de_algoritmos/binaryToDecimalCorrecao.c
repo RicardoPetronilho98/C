@@ -22,7 +22,7 @@ int sumArray(int a, int b, int v[]){
 
 	int i, sum = 0;
 
-	for (i = a; i <= b; i++) sum += v[i] * pow(2, i);;
+	for (i = a; i <= b; i++) sum += v[i] * pow(2, i);
 
 	return sum;
 }
@@ -42,7 +42,7 @@ int binaryToDecimal(int a[], int N){
 		
 		assert(n == sumArray(0, i - 1, a) && i <= N); // Invariante
 		
-		n = n * 2 + a[i];
+		n = n + a[i] * pow(2, i);
 		i = i + 1;
 	}
 
