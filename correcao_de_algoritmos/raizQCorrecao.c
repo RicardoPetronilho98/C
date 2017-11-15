@@ -36,7 +36,7 @@ int raizQ(int n){
 	
 	if (r * r > n) r = r - 1;
 	
-	assert(r*r <= n0 && (r+1)*(r+1) > n0); // pós-condição do programa
+	assert(r * r <= n0 && (r + 1) * (r + 1) > n0); // pós-condição do programa
 
 	return r;
 }

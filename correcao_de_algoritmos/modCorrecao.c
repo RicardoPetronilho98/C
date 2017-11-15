@@ -50,11 +50,14 @@ int mod(int x, int y){
 	
 	while (r >= y) {
 		
+		// r >= 0 && (exists q >= 0 : q * y + r = x)
 		assert(r >= 0 && hasSomeAssert(y, r, x) == 1); // isto é o Invariante
+		
 		r = r - y;
 
 	}
 	
+	// 0 <= r < y && (exists q >= 0 : q * y + r = x)
 	assert(0 <= r && r < y && hasSomeAssert(y, r, x) == 1); //pós-condição do programa
 	
 	return r;

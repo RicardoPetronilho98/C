@@ -40,12 +40,14 @@ int binaryToDecimal(int a[], int N){
 
 	while (i < N){
 		
+		// n == sum{k=0}{k=i-1} b[k] * (2^k)
 		assert(n == sumArray(0, i - 1, a) && i <= N); // Invariante
 		
 		n = n + a[i] * pow(2, i);
 		i = i + 1;
 	}
 
+	// n == sum{k=0}{k=N-1} b[k] * (2^k)
 	assert(n == sumArray(0, N - 1, a)); // pós-condição do programa
 
 	return n;
