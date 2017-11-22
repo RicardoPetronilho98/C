@@ -30,7 +30,7 @@ Entry procura(chave cp, int N, Entry v[]){
 	int h = hash(cp, N);
 	int i = h;
 
-	while (v[i]->status != livre){
+	while (v[i]->status != livre || i < N){
 
 		if (v[i]->c == h) return v[i];
 
@@ -41,14 +41,15 @@ Entry procura(chave cp, int N, Entry v[]){
 }
 
 
-void listArray(int v[], int N){
+
+/*void listArray(int v[], int N){
 
 	int i;
 
 	for (i = 0; i < N; i++) printf("\nchave: %d --> info: %s\n", v[i]->c, v[i]->info);
 
 	putchar('\n');
-}
+}*/
 
 
 
