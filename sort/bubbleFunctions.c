@@ -17,8 +17,10 @@ void bubbleUp(int heap[], int i){
 	int p = pai(i);
 
 	while (i > 0 && heap[p] > heap[i]){
+		
 		swap(heap, i, p);
-		i = p; p = pai(i);
+		i = p; 
+		p = pai(i);
 	}
 }
 
@@ -31,7 +33,7 @@ void bubbleDown(int heap[], int N, int i){
 
 		if(f + 1 < N && heap[f + 1] < heap[f]) f = f + 1;
 
-		if (heap[i] <= heap[f]) break;
+		if (heap[i] <= heap[f]) break; //já tá tudo direito
 
 		swap(heap, i, f);
 		i = f;
@@ -40,13 +42,22 @@ void bubbleDown(int heap[], int N, int i){
 }
 
 
-void bubbleSort(int a[], int N){ //custo: N * log2 (N)
+void heapSort(int a[], int N){ //custo: N * log2 (N)
+
+	// o array (a) está ao calhas (aleatório)
 
 	int i;
 
 	for (i = 1; i < N; i++) bubbleUp(a, i); 
 
- 	//função nao acabada
+	// neste momento o array (a) é uma min-heap
+	// definição de min-heap -> pai é menor que os filhos
+
+ 	for (i = N - 1; i > 1; i--){
+ 		
+ 		swap(a, 0, i);
+ 		bubbleDown(a, i, 0);
+ 	}
 }
 
 
@@ -79,16 +90,16 @@ int main(){
 	int heap2[] = {1, 2, 7, 5, 3, 10, 43, 8, 9, 4, 21, -5};
 	puts("\nefeito do bubbleUp: puxa o (-5) para cima");
 	printf("antes  ---> "); printArray(heap2, N);
-	bubbleUp(heap2, 11);
+	bubbleUp(heap2, N - 1);
 	printf("depois ---> "); printArray(heap2, N);
 	//---------------------------------------------------------------
 
-	//exemplo do - bubbleSorte - em execução ---> ordena o array:
+	//exemplo do - heapSort - em execução ---> ordena o array:
 	N = 11;
-	int heap3[] = {1, 2, 7, 5, 3, 10, 43, 8, 9, 4, 21};
-	puts("\nefeito do bubbleSort: ordena o array");
+	int heap3[] = {6, 2, 7, 5, 3, 10, 43, 8, 9, 4, 21};
+	puts("\nefeito do heapSort: ordena o array");
 	printf("antes  ---> "); printArray(heap3, N);
-	bubbleSort(heap3, N);
+	heapSort(heap3, N);
 	printf("depois ---> "); printArray(heap3, N);
 	//---------------------------------------------------------------
 	putchar('\n');
