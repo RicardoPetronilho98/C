@@ -96,7 +96,7 @@ int main(){
 	printf("depois ---> "); printArray(heap2, N);
 	//---------------------------------------------------------------
 
-	//exemplo do - heapSort - em execução ---> ordena o array:
+	//exemplo do - heapSort - em execução ---> ordena o array de forma descrescente:
 	N = 11;
 	int heap3[] = {6, 2, 7, 5, 3, 10, 43, 8, 9, 4, 21};
 	puts("\nefeito do heapSort: ordena o array");
