@@ -58,6 +58,8 @@ void heapSort(int a[], int N){ //custo: N * log2 (N)
  		swap(a, 0, i);
  		bubbleDown(a, i, 0);
  	}
+
+ 	swap(a, 0, 1);
 }
 
 
