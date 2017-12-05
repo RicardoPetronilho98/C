@@ -53,6 +53,16 @@ void matToLista(GrafoM in, Grafo out){
 }
 
 
+void printArray(int a[], int N){
+
+	int i;
+
+	for(i = 0; i < N; i++) 
+		printf("%d ", a[i]);
+
+	puts("\n");
+}
+
 
 
 void printMatrix(GrafoM a){
@@ -195,9 +205,10 @@ int vMaxCap_Ineficiente(Grafo g){
 
 
 
-/*int bFirst(Grafo g, int vm int ant[]){
+int breadthFirst(Grafo g, int v, int ant[]){
 
 	int q[NV], i, f, visitados[NV];
+	struct aresta *x;
 
 	for (i = 0; i < NV; i++){
 
@@ -205,22 +216,25 @@ int vMaxCap_Ineficiente(Grafo g){
 		ant[i] = -1;
 	}
 
-	i = f = 0; q[f++] = v; visitados[v] = 1;
+	i = f = 0; 
+	q[f++] = v; // a fila/ orla começa com o vértice inicial
+	visitados[v] = 1; // para respeitar o Invariante o vértice inicial é visitado aqui
 
 	while(i != f){
 
-		v = q[i++]; // vai á fila/ orla e 'busca' o elemento
+		v = q[i++]; // vai á fila e 'busca' o elemento do inicio (i)
 		
 		for (x = g[v]; x; x = x->prox) // percorre os sucessores de v
-			if (!visitados[x->destino]){ //se o destino de v ainda NÃO foi visitado
-				q[f++] = x->destino;
-				ant[x->destino] = v;
-				visitado[x->destino] = 1;
+			if (!visitados[x->destino]){ // se o destino de v ainda NÃO foi visitado
+				
+				q[f++] = x->destino; // acrescenta esse vértice á fila
+				ant[x->destino] = v; // o vértice v é o anterior ao x->destino (logicamente)
+				visitados[x->destino] = 1; // x->destino foi visitado aqui
 			}
 	}
 
 	return i;
-}*/
+}
 
 
 
@@ -237,13 +251,18 @@ int main(){
 	listaToMat(B, C); // aqui a mat C == mat A
 	printMatrix(C); 
 
-	int v = 7;
-	printf("capacidade de entrada no vértice %d --> %d\n\n", v, capacidadeIn(B, v) );
-	printf("capacidade de saida no vértice %d --> %d\n\n", v, capacidadeOut(B, v) );
-	printf("capacidade total do vértice %d --> %d\n\n", v, capacidade(B, v) );
+	int v = 3;
+	printf("capacidade de entrada no vertice %d --> %d\n\n", v, capacidadeIn(B, v) );
+	printf("capacidade de saida no vertice %d --> %d\n\n", v, capacidadeOut(B, v) );
+	printf("capacidade total (In - Out) do vertice %d --> %d\n\n", v, capacidade(B, v) );
 	
-	printf("vértice com maior capacidade total do grafo B --> %d \n\n", vMaxCap(B) );
-	printf("vértice com maior capacidade total do grafo B --> %d (versao INEFICIENTE)\n\n", vMaxCap_Ineficiente(B) );
+	printf("vertice com maior capacidade total do grafo B --> %d \n\n", vMaxCap(B) );
+	printf("vertice com maior capacidade total do grafo B --> %d (versao INEFICIENTE)\n\n", vMaxCap_Ineficiente(B) );
+
+	int ant[NV];
+	int v2 = 0;
+	printf("maximo alcance/ nº de vertices atingidos pelo vertice %d --> %d\n\n", v2, breadthFirst(B, v2, ant));
+	printArray(ant, NV);
 
 	return 0;
 }
