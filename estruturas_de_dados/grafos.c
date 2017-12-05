@@ -195,6 +195,35 @@ int vMaxCap_Ineficiente(Grafo g){
 
 
 
+/*int bFirst(Grafo g, int vm int ant[]){
+
+	int q[NV], i, f, visitados[NV];
+
+	for (i = 0; i < NV; i++){
+
+		visitados[i] = 0;
+		ant[i] = -1;
+	}
+
+	i = f = 0; q[f++] = v; visitados[v] = 1;
+
+	while(i != f){
+
+		v = q[i++]; // vai á fila/ orla e 'busca' o elemento
+		
+		for (x = g[v]; x; x = x->prox) // percorre os sucessores de v
+			if (!visitados[x->destino]){ //se o destino de v ainda NÃO foi visitado
+				q[f++] = x->destino;
+				ant[x->destino] = v;
+				visitado[x->destino] = 1;
+			}
+	}
+
+	return i;
+}*/
+
+
+
 
 int main(){
 
@@ -213,8 +242,8 @@ int main(){
 	printf("capacidade de saida no vértice %d --> %d\n\n", v, capacidadeOut(B, v) );
 	printf("capacidade total do vértice %d --> %d\n\n", v, capacidade(B, v) );
 	
-	printf("vértice com maior capacidade total do grafo B --> %d \n\n", v, vMaxCap(B) );
-	printf("vértice com maior capacidade total do grafo B --> %d (versao INEFICIENTE)\n\n", v, vMaxCap_Ineficiente(B) );
+	printf("vértice com maior capacidade total do grafo B --> %d \n\n", vMaxCap(B) );
+	printf("vértice com maior capacidade total do grafo B --> %d (versao INEFICIENTE)\n\n", vMaxCap_Ineficiente(B) );
 
 	return 0;
 }
