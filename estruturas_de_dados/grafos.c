@@ -76,12 +76,12 @@ void printGrafo(Grafo a){
 	int l;
 	struct aresta *x;
 
-	for(l = 0; l < NV; l++){//percorre todos os vértices
+	for(l = 0; l < NV; l++){// percorre todos os vértices
 		
 		printf("%d -> ", l);
 		
-		//percorre os sucessores do vértice (l)
-		for(x = a[l]; x; x = x->prox) printf("(%d | peso: %d) -> ", x->destino, x->peso); 
+		for(x = a[l]; x; x = x->prox) // percorre os sucessores do vértice (l)
+			printf("(%d | peso: %d) -> ", x->destino, x->peso); 
 
 		putchar('\n');
 	}
@@ -97,7 +97,7 @@ void listaToMat(Grafo in, GrafoM out){
 	int l, c;
 	struct aresta *x;
 
-	for (l = 0; l < NV; l++) //inicializar a matriz out a zeros
+	for (l = 0; l < NV; l++) // inicializar a matriz out a zeros
 		for (c = 0; c < NV; c++)
 			out[l][c] = 0;
 
@@ -152,6 +152,49 @@ int capacidade(Grafo g, int v){
 
 
 
+int vMaxCap(Grafo g){
+
+	int cap[NV], l, r;
+	struct aresta *x;
+
+	for (l = 0; l < NV; cap[l++] = 0); //inicializa o array cap[] a zeros
+
+	for (l = 0; l < NV; l++) // percorre todos os vértices
+		for (x = g[l]; x; x = x->prox){ // percorre todos os sucessores do vértice (l)
+			
+			// o resultado final desta parte é o calculo eficiente da capacidade de todos os vértices
+			cap[l] -= x->peso;
+			cap[x->destino] += x->peso;
+		}
+
+	for (r = 0, l = 1; l < NV; l++) // este ciclo determina o MAX do array cap[]
+		if (cap[l] > cap[r]) r = l;
+
+	return r;
+}
+
+
+
+
+int vMaxCap_Ineficiente(Grafo g){
+
+	int cap[NV], l, r;
+	struct aresta *x;
+
+	for (l = 0; l < NV; cap[l++] = 0); // inicializa o array cap[] a zeros
+
+	for (l = 0; l < NV; l++) // percorre todos os vértices
+		cap[l] = capacidade(g, l); // 'men' isto aqui vai fazer muitas iterações, o mesmo se obtém fazendo poucas...
+
+	for (r = 0, l = 1; l < NV; l++)
+		if (cap[l] > cap[r]) r = l;
+
+	return r;
+}
+
+
+
+
 
 int main(){
 
@@ -169,6 +212,9 @@ int main(){
 	printf("capacidade de entrada no vértice %d --> %d\n\n", v, capacidadeIn(B, v) );
 	printf("capacidade de saida no vértice %d --> %d\n\n", v, capacidadeOut(B, v) );
 	printf("capacidade total do vértice %d --> %d\n\n", v, capacidade(B, v) );
+	
+	printf("vértice com maior capacidade total do grafo B --> %d \n\n", v, vMaxCap(B) );
+	printf("vértice com maior capacidade total do grafo B --> %d (versao INEFICIENTE)\n\n", v, vMaxCap_Ineficiente(B) );
 
 	return 0;
 }
