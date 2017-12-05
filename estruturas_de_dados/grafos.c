@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NV 		8
+#define NV			8
 
 typedef int GrafoM[NV][NV];
 
-typedef struct aresta{
+typedef struct aresta {
 
 	int destino;
 	int peso;
@@ -13,9 +13,8 @@ typedef struct aresta{
 	
 } *Grafo[NV];
 
-
 GrafoM A = {
-	
+
 	{0, 0, 0, 1, 0, 0, 0, 0},
 	{2, 0, 0, 0, 0, 0, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0},
@@ -55,11 +54,13 @@ void matToLista(GrafoM in, Grafo out){
 
 
 
+
 void printMatrix(GrafoM a){
 
 	int l, c;
 
 	for(l = 0; l < NV; l++){
+		
 		for (c = 0; c < NV; c++) printf("%d ", a[l][c]);
 		putchar('\n');
 	}
@@ -69,13 +70,13 @@ void printMatrix(GrafoM a){
 
 
 
+
 void printGrafo(Grafo a){
 
 	int l;
 	struct aresta *x;
 
-	//percorre todos os vértices
-	for(l = 0; l < NV; l++){
+	for(l = 0; l < NV; l++){//percorre todos os vértices
 		
 		printf("%d -> ", l);
 		
@@ -86,8 +87,9 @@ void printGrafo(Grafo a){
 	}
 
 	putchar('\n');
-
 }
+
+
 
 
 void listaToMat(Grafo in, GrafoM out){
@@ -95,8 +97,7 @@ void listaToMat(Grafo in, GrafoM out){
 	int l, c;
 	struct aresta *x;
 
-	//inicializar a matriz out a zeros
-	for (l = 0; l < NV; l++)
+	for (l = 0; l < NV; l++) //inicializar a matriz out a zeros
 		for (c = 0; c < NV; c++)
 			out[l][c] = 0;
 
@@ -104,6 +105,51 @@ void listaToMat(Grafo in, GrafoM out){
 		for (x = in[l]; x; x = x->prox) //percorre todos os sucessores do vértice (l)
 			out[l][x->destino] = x->peso;
 }
+
+
+
+
+int capacidadeIn(Grafo g, int v){
+
+	// peso total das 'setas' que estão a 'entrar' no vértive v
+
+	int l, count = 0;
+	struct aresta *x;
+
+	for (l = 0; l < NV; l++) // percorre todos os vértices
+		for (x = g[l]; x; x = x->prox) // percorre todos os sucessores do vértice (l)
+			if (x->destino == v){
+				count += x->peso;
+				break; // este 'men' já não apareçe á frente, logo não é preciso continuar a procurar
+			}
+
+	return count;
+}
+
+
+
+
+int capacidadeOut(Grafo g, int v){
+
+	// peso total das 'setas' que estão a 'sair' no vértive v
+
+	int count = 0;
+	struct aresta *x;
+
+	for (x = g[v]; x; x = x->prox) // percorre todos os sucessores do vértice (l)
+		count += x->peso;
+
+	return count;
+}
+
+
+
+
+int capacidade(Grafo g, int v){
+
+	return capacidadeIn(g, v) - capacidadeOut(g, v);
+}
+
 
 
 
@@ -119,14 +165,10 @@ int main(){
 	listaToMat(B, C); // aqui a mat C == mat A
 	printMatrix(C); 
 
+	int v = 7;
+	printf("capacidade de entrada no vértice %d --> %d\n\n", v, capacidadeIn(B, v) );
+	printf("capacidade de saida no vértice %d --> %d\n\n", v, capacidadeOut(B, v) );
+	printf("capacidade total do vértice %d --> %d\n\n", v, capacidade(B, v) );
+
 	return 0;
 }
-
-
-
-
-
-
-
-
-
