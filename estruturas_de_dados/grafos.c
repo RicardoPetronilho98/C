@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NV			8
+
+
+#define NV					8
+#define INFINITY	  	99999
+
+
 
 typedef int GrafoM[NV][NV];
+
+
 
 typedef struct aresta {
 
@@ -12,6 +19,8 @@ typedef struct aresta {
 	struct aresta *prox;
 	
 } *Grafo[NV];
+
+
 
 GrafoM A = {
 
@@ -24,6 +33,73 @@ GrafoM A = {
 	{0, 0, 0, 0, 0, 0, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0}
 };
+
+
+
+GrafoM D = {
+
+	{0, 0, 0, 6, 0, 0, 0, 0},
+	{5, 0, 18, 0, 0, 21, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 1, 0, 0, 0},
+	{10, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 11, 0, 3, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0}
+};
+
+
+
+
+//------------------------------------------------------------------------------------------------
+
+void printArray(int a[], int N){
+
+	int i;
+
+	for(i = 0; i < N; i++) 
+		printf("%d ", a[i]);
+
+	puts("\n");
+}
+
+
+
+void printMatrix(GrafoM a){
+
+	int l, c;
+
+	for(l = 0; l < NV; l++){
+		
+		for (c = 0; c < NV; c++) printf("%d ", a[l][c]);
+		putchar('\n');
+	}
+
+	putchar('\n');
+}
+
+
+
+void printGrafo(Grafo a){
+
+	int l;
+	struct aresta *x;
+
+	for(l = 0; l < NV; l++){// percorre todos os vértices
+		
+		printf("%d -> ", l);
+		
+		for(x = a[l]; x; x = x->prox) // percorre os sucessores do vértice (l)
+			printf("(%d | peso: %d) -> ", x->destino, x->peso); 
+
+		putchar('\n');
+	}
+
+	putchar('\n');
+}
+
+//------------------------------------------------------------------------------------------------
+
 
 
 
@@ -53,55 +129,6 @@ void matToLista(GrafoM in, Grafo out){
 }
 
 
-void printArray(int a[], int N){
-
-	int i;
-
-	for(i = 0; i < N; i++) 
-		printf("%d ", a[i]);
-
-	puts("\n");
-}
-
-
-
-void printMatrix(GrafoM a){
-
-	int l, c;
-
-	for(l = 0; l < NV; l++){
-		
-		for (c = 0; c < NV; c++) printf("%d ", a[l][c]);
-		putchar('\n');
-	}
-
-	putchar('\n');
-}
-
-
-
-
-void printGrafo(Grafo a){
-
-	int l;
-	struct aresta *x;
-
-	for(l = 0; l < NV; l++){// percorre todos os vértices
-		
-		printf("%d -> ", l);
-		
-		for(x = a[l]; x; x = x->prox) // percorre os sucessores do vértice (l)
-			printf("(%d | peso: %d) -> ", x->destino, x->peso); 
-
-		putchar('\n');
-	}
-
-	putchar('\n');
-}
-
-
-
-
 void listaToMat(Grafo in, GrafoM out){
 
 	int l, c;
@@ -115,6 +142,9 @@ void listaToMat(Grafo in, GrafoM out){
 		for (x = in[l]; x; x = x->prox) //percorre todos os sucessores do vértice (l)
 			out[l][x->destino] = x->peso;
 }
+
+//------------------------------------------------------------------------------------------------
+
 
 
 
@@ -162,6 +192,7 @@ int capacidade(Grafo g, int v){
 
 
 
+
 int vMaxCap(Grafo g){
 
 	int cap[NV], l, r;
@@ -189,7 +220,6 @@ int vMaxCap(Grafo g){
 int vMaxCap_Ineficiente(Grafo g){
 
 	int cap[NV], l, r;
-	struct aresta *x;
 
 	for (l = 0; l < NV; cap[l++] = 0); // inicializa o array cap[] a zeros
 
@@ -201,6 +231,8 @@ int vMaxCap_Ineficiente(Grafo g){
 
 	return r;
 }
+
+//------------------------------------------------------------------------------------------------
 
 
 
@@ -239,6 +271,121 @@ int breadthFirst(Grafo g, int v, int ant[]){
 
 
 
+int succN(Grafo g, int v, int N){
+
+	int q[NV], i, f, visitados[NV], dist[NV];
+	struct aresta *x;
+
+	for(i = 0; i < NV; i++){
+		 
+		dist[i] = -1; // o JBB não fez esta linha ??
+		visitados[i] = 0;
+	}
+
+	i = f = 0; 
+	q[f++] = v;
+	visitados[v] = 1;
+	dist[v] = 0;
+
+	while(i != f){
+
+		v = q[i++];
+
+		if (dist[v] > N - 1) break; // deve ser N - 1 em vez de N ??
+
+		for (x = g[v]; x; x = x->prox)
+			if (!visitados[x->destino]){
+				
+				q[f++] = x->destino;
+				visitados[x->destino] = 1;
+				dist[x->destino] = dist[v] + 1;
+			}
+	}
+
+	printArray(dist, NV); // o array dist[] devia ser dado como argumento ??
+
+	return f; // aqui tava return i... mas deve ser return f ??
+}
+
+//------------------------------------------------------------------------------------------------
+
+
+
+
+int procuraRec(Grafo g, int o, int d, int visitados[]){
+
+	int found = 0;
+	struct aresta *x;
+
+	visitados[o] = 1;
+	
+	if (o == d) found = 1; //encontrou um caminho, acaba a função
+	else
+		for (x = g[o]; x && !found; x = x->prox)
+			if (!visitados[x->destino])
+				found = procuraRec(g , x->destino, d, visitados);
+	
+	return found;
+}
+
+
+
+int procura(Grafo g, int o, int d){
+
+	int visitados[NV], i;
+
+	for (i = 0; i < NV; i++) visitados[i] = 0;
+
+	return procuraRec(g, o, d, visitados);
+}
+
+//------------------------------------------------------------------------------------------------
+
+
+
+
+void floydWarshall(Grafo g, int m[NV][NV], int c[NV][NV]){
+
+	int i, o, d;
+	struct aresta *x;
+
+	// inicializar as matrizes m e c
+	for (i = 0; i < NV; i++)
+		for (o = 0; o < NV; o++){
+			c[i][o] = -1;
+			m[i][o] = INFINITY;
+		}
+
+	//colocar os pesos nas caixas certas
+	for (i = 0; i < NV; i++)
+		for (x = g[i]; x; x = x->prox)
+			m[i][x->destino] = x->peso;
+
+	for (i = 0; i < NV; i++)
+		for (o = 0; o < NV; o++)
+			if (m[o][i] != INFINITY)
+				for (d = 0; d < NV; d++)
+					if (m[i][d] != INFINITY)
+						if (m[o][d] > m[o][i] + m[i][d]) m[o][d] = m[o][i] + m[i][d];
+}
+
+
+
+
+void imprimeCaminho(int m[NV][NV], int c[NV][NV], int o, int d){
+
+	if (c[o][d] == -1) printf("%d - %d - %d\n", o, m[o][d], d);
+	
+	else{
+		
+		imprimeCaminho(m, c, o, c[o][d]);
+		imprimeCaminho(m, c, c[o][d], d);
+	}
+}
+
+//------------------------------------------------------------------------------------------------
+
+
 int main(){
 
 	printMatrix(A);
@@ -264,5 +411,22 @@ int main(){
 	printf("maximo alcance/ nº de vertices atingidos pelo vertice %d --> %d\n\n", v2, breadthFirst(B, v2, ant));
 	printArray(ant, NV);
 
+	printf("succN de %d --> %d\n\n", v2, succN(B, v2, 2));
+
+	int m[NV][NV], c[NV][NV];
+
+	Grafo E;
+	matToLista(D, E);
+
+	floydWarshall(E, m, c);
+
+	int origem = 1;
+	int destino = 7;
+	imprimeCaminho(m, c, origem, destino);
+	putchar('\n');
+
+	int some = procura(B, origem, destino);
+	printf("%d\n\n", some);
+	
 	return 0;
 }
