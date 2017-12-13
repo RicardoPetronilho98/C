@@ -276,11 +276,7 @@ int succN(Grafo g, int v, int N){
 	int q[NV], i, f, visitados[NV], dist[NV];
 	struct aresta *x;
 
-	for(i = 0; i < NV; i++){
-		 
-		dist[i] = -1; // o JBB não fez esta linha ??
-		visitados[i] = 0;
-	}
+	for(i = 0; i < NV; i++)	visitados[i] = 0;
 
 	i = f = 0; 
 	q[f++] = v;
@@ -289,9 +285,11 @@ int succN(Grafo g, int v, int N){
 
 	while(i != f){
 
-		v = q[i++];
+		v = q[i];
 
-		if (dist[v] > N - 1) break; // deve ser N - 1 em vez de N ??
+		if (dist[v] > N) break;
+		
+		i++;
 
 		for (x = g[v]; x; x = x->prox)
 			if (!visitados[x->destino]){
@@ -302,9 +300,7 @@ int succN(Grafo g, int v, int N){
 			}
 	}
 
-	printArray(dist, NV); // o array dist[] devia ser dado como argumento ??
-
-	return f; // aqui tava return i... mas deve ser return f ??
+	return i;
 }
 
 //------------------------------------------------------------------------------------------------
@@ -388,12 +384,13 @@ void imprimeCaminho(int m[NV][NV], int c[NV][NV], int o, int d){
 
 int main(){
 
-	printMatrix(A);
+	//printMatrix(A);
 
 	Grafo B;
 	matToLista(A, B);
 	printGrafo(B);
 
+	/*
 	GrafoM C;
 	listaToMat(B, C); // aqui a mat C == mat A
 	printMatrix(C); 
@@ -411,8 +408,12 @@ int main(){
 	printf("maximo alcance/ nº de vertices atingidos pelo vertice %d --> %d\n\n", v2, breadthFirst(B, v2, ant));
 	printArray(ant, NV);
 
-	printf("succN de %d --> %d\n\n", v2, succN(B, v2, 2));
+	*/
+	int v = 3;
+	int dist = 1;
+	printf("succN de %d com dist = %d --> %d\n\n", v, dist, succN(B, v, dist));
 
+	/*
 	int m[NV][NV], c[NV][NV];
 
 	Grafo E;
@@ -427,6 +428,6 @@ int main(){
 
 	int some = procura(B, origem, destino);
 	printf("%d\n\n", some);
-	
+	*/
 	return 0;
 }
