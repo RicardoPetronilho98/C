@@ -374,15 +374,15 @@ int naoAlcancavel(Grafo g, int o){
 
 	//usando a travessia recursiva depthFirst
 
-	int i, ant[NV];
+	int v, ant[NV];
 
 	depthFirst(g, o, ant);
 
 	ant[o] = o; 
 
-	for (i = 0; i < NV; i++) if (ant[i] == -1) break;
+	for (v = 0; v < NV; v++) if (ant[v] == -1) break;
 	
-	return i;
+	return v;
 }
 
 
@@ -391,15 +391,15 @@ int naoAlcancavel2(Grafo g, int o){
 
 	//usando a travessia imperativa breadthFirst
 
-	int i, ant[NV];
+	int v, ant[NV];
 
 	breadthFirst(g, o, ant);
 
 	ant[o] = o; 
 
-	for (i = 0; i < NV; i++) if (ant[i] == -1) break;
+	for (v = 0; v < NV && ant[v] != -1; v++);
 	
-	return i;
+	return v;
 }
 
 
