@@ -305,6 +305,40 @@ int succN(Grafo g, int v, int N){
 
 
 
+int depthFirstRec(Grafo g, int v, int ant[], int visitados[]){
+
+	int count = 1;
+	struct aresta *x;
+
+	visitados[v] = 1;
+
+	for (x = g[v]; x; x = x->prox)
+		if (!visitados[x->destino]){
+			
+			ant[x->destino] = v;
+			count += depthFirstRec(g, x->destino, ant, visitados);
+		}
+
+	return count;
+}
+
+
+int depthFirst(Grafo g, int v, int ant[]){
+
+	int visitados[NV], i;
+
+	for (i = 0; i < NV; i++){
+
+		ant[i] = -1;
+		visitados[i] = 0;
+	}
+
+	return depthFirstRec(g, v, ant, visitados);
+}
+
+
+
+
 int procuraRec(Grafo g, int o, int d, int visitados[]){
 
 	int found = 0;
@@ -340,12 +374,15 @@ int naoAlcancavel(Grafo g, int o){
 
 	//usando a travessia recursiva depthFirst
 
-	int v;
+	int i, ant[NV];
 
-	for (v = 0; v < NV; v++) 
-		if (!procura(g, o, v)) break;
+	depthFirst(g, o, ant);
 
-	return v;
+	ant[o] = o; 
+
+	for (i = 0; i < NV; i++) if (ant[i] == -1) break;
+	
+	return i;
 }
 
 
@@ -364,6 +401,21 @@ int naoAlcancavel2(Grafo g, int o){
 	
 	return i;
 }
+
+
+
+int naoAlcancavel3(Grafo g, int o){
+
+	//usando a função recursiva procura (variação da travessia depthFirst)
+
+	int v;
+
+	for (v = 0; v < NV; v++) 
+		if (!procura(g, o, v)) break;
+
+	return v;
+}
+
 
 
 // Caminho mais curto --------------------------------------------------------------------------------
@@ -446,7 +498,9 @@ int main(){
 
 	printf("%d nao e alcancavel por %d\n\n",  naoAlcancavel(B, 0), v);
 
-	printf("%d nao e alcancavel por %d\n\n",  naoAlcancavel2(B, 0), v);
+	printf("%d nao e alcancavel2 por %d\n\n",  naoAlcancavel2(B, 0), v);
+
+	printf("%d nao e alcancavel3 por %d\n\n",  naoAlcancavel3(B, 0), v);
 
 
 
