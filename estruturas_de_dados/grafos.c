@@ -51,7 +51,7 @@ GrafoM D = {
 
 
 
-//------------------------------------------------------------------------------------------------
+//print functions ------------------------------------------------------------------------------------
 
 void printArray(int a[], int N){
 
@@ -98,7 +98,7 @@ void printGrafo(Grafo a){
 	putchar('\n');
 }
 
-//------------------------------------------------------------------------------------------------
+//Conversões Matriz-Grafos --------------------------------------------------------------------------
 
 
 
@@ -143,7 +143,7 @@ void listaToMat(Grafo in, GrafoM out){
 			out[l][x->destino] = x->peso;
 }
 
-//------------------------------------------------------------------------------------------------
+//Capacidade de vértices -------------------------------------------------------------------------------
 
 
 
@@ -232,7 +232,7 @@ int vMaxCap_Ineficiente(Grafo g){
 	return r;
 }
 
-//------------------------------------------------------------------------------------------------
+//Travessias de grafos -------------------------------------------------------------------------------------
 
 
 
@@ -303,9 +303,6 @@ int succN(Grafo g, int v, int N){
 	return i;
 }
 
-//------------------------------------------------------------------------------------------------
-
-
 
 
 int procuraRec(Grafo g, int o, int d, int visitados[]){
@@ -335,7 +332,41 @@ int procura(Grafo g, int o, int d){
 	return procuraRec(g, o, d, visitados);
 }
 
-//------------------------------------------------------------------------------------------------
+
+
+// outras funções utéis ----------------------------------------------------------------------------------------
+
+int naoAlcancavel(Grafo g, int o){
+
+	//usando a travessia recursiva depthFirst
+
+	int v;
+
+	for (v = 0; v < NV; v++) 
+		if (!procura(g, o, v)) break;
+
+	return v;
+}
+
+
+
+int naoAlcancavel2(Grafo g, int o){
+
+	//usando a travessia imperativa breadthFirst
+
+	int i, ant[NV];
+
+	breadthFirst(g, o, ant);
+
+	ant[o] = o; 
+
+	for (i = 0; i < NV; i++) if (ant[i] == -1) break;
+	
+	return i;
+}
+
+
+// Caminho mais curto --------------------------------------------------------------------------------
 
 
 
@@ -412,6 +443,12 @@ int main(){
 	int v = 3;
 	int dist = 1;
 	printf("succN de %d com dist = %d --> %d\n\n", v, dist, succN(B, v, dist));
+
+	printf("%d nao e alcancavel por %d\n\n",  naoAlcancavel(B, 0), v);
+
+	printf("%d nao e alcancavel por %d\n\n",  naoAlcancavel2(B, 0), v);
+
+
 
 	/*
 	int m[NV][NV], c[NV][NV];
