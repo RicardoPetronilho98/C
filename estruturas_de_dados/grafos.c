@@ -417,6 +417,83 @@ int naoAlcancavel3(Grafo g, int o){
 }
 
 
+/*
+struct aresta* reverseIterative(struct aresta* input){
+		
+	struct aresta* head;
+	struct aresta* currNode = input;
+	struct aresta* nextNode = NULL;
+	struct aresta* prevNode = NULL;
+
+	while(currNode != NULL){
+		
+		nextNode = currNode->prox;
+		currNode->prox = prevNode;
+		prevNode = currNode;
+		currNode = nextNode;
+	}
+	
+	head = prevNode;
+
+	return head;
+}
+*/
+
+void inverteGrafo(Grafo g){
+
+	GrafoM a, transpose; 
+	int l, c;
+
+	listaToMat(g, a);
+
+	for(l = 0; l < NV; l++)
+        for(c = 0; c < NV; c++) 
+        	transpose[l][c] = a[c][l];
+
+    matToLista(transpose, g);
+}
+
+
+void inverteGrafo2(Grafo g1, Grafo g2){
+
+	int l;
+	struct aresta *x, *temp;
+
+	for (l = 0; l < NV; l++) g2[l] = NULL;
+
+	for (l = 0; l < NV; l++)
+		for (x = g1[l]; x; x = x->prox){
+			
+			temp = malloc(sizeof(struct aresta));
+			
+			temp->destino = l;
+			temp->peso = x->peso;
+			temp->prox = g2[x->destino];
+			g2[x->destino] = temp;
+		}
+}
+
+/*
+void inverteGrafoZE(Grafo g){
+
+	struct aresta *x, *new;
+	Grafo temp;
+	int l;
+
+	for (l = 0; l < NV; l++)
+		for (x = g[l]; x; x = x->prox){
+			
+			new = malloc(sizeof(struct aresta));
+			
+			temp[x->destino] = new;
+			new->destino = l;
+			new->prox = temp[l]; ----
+			temp[l] = new;
+		}
+	
+	g = temp;
+}
+*/
 
 // Caminho mais curto --------------------------------------------------------------------------------
 
@@ -469,9 +546,16 @@ int main(){
 
 	//printMatrix(A);
 
-	Grafo B;
+	Grafo B, E, F;
 	matToLista(A, B);
+	matToLista(A, F);
 	printGrafo(B);
+	
+	inverteGrafo(B);
+	printGrafo(B);
+	
+	inverteGrafo2(F, E);
+	printGrafo(E);
 
 	/*
 	GrafoM C;
@@ -491,10 +575,11 @@ int main(){
 	printf("maximo alcance/ nº de vertices atingidos pelo vertice %d --> %d\n\n", v2, breadthFirst(B, v2, ant));
 	printArray(ant, NV);
 
-	*/
+	
 	int v = 3;
-	int dist = 1;
-	printf("succN de %d com dist = %d --> %d\n\n", v, dist, succN(B, v, dist));
+	
+	//int dist = 1;
+	//printf("succN de %d com dist = %d --> %d\n\n", v, dist, succN(B, v, dist));
 
 	printf("%d nao e alcancavel por %d\n\n",  naoAlcancavel(B, 0), v);
 
@@ -503,8 +588,6 @@ int main(){
 	printf("%d nao e alcancavel3 por %d\n\n",  naoAlcancavel3(B, 0), v);
 
 
-
-	/*
 	int m[NV][NV], c[NV][NV];
 
 	Grafo E;
