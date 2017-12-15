@@ -2,14 +2,11 @@
 #include <stdlib.h>
 
 
-
 #define NV					8
 #define INFINITY	  	99999
 
 
-
 typedef int GrafoM[NV][NV];
-
 
 
 typedef struct aresta {
@@ -35,7 +32,6 @@ GrafoM A = {
 };
 
 
-
 GrafoM D = {
 
 	{0, 0, 0, 6, 0, 0, 0, 0},
@@ -47,8 +43,6 @@ GrafoM D = {
 	{0, 0, 0, 0, 0, 0, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0}
 };
-
-
 
 
 //print functions ------------------------------------------------------------------------------------
@@ -101,8 +95,6 @@ void printGrafo(Grafo a){
 //Conversões Matriz-Grafos --------------------------------------------------------------------------
 
 
-
-
 void matToLista(GrafoM in, Grafo out){
 
 	int l, c;
@@ -147,8 +139,6 @@ void listaToMat(Grafo in, GrafoM out){
 
 
 
-
-
 int capacidadeIn(Grafo g, int v){
 
 	// peso total das 'setas' que estão a 'entrar' no vértive v
@@ -167,8 +157,6 @@ int capacidadeIn(Grafo g, int v){
 }
 
 
-
-
 int capacidadeOut(Grafo g, int v){
 
 	// peso total das 'setas' que estão a 'sair' no vértive v
@@ -183,14 +171,10 @@ int capacidadeOut(Grafo g, int v){
 }
 
 
-
-
 int capacidade(Grafo g, int v){
 
 	return capacidadeIn(g, v) - capacidadeOut(g, v);
 }
-
-
 
 
 int vMaxCap(Grafo g){
@@ -215,8 +199,6 @@ int vMaxCap(Grafo g){
 }
 
 
-
-
 int vMaxCap_Ineficiente(Grafo g){
 
 	int cap[NV], l, r;
@@ -233,8 +215,6 @@ int vMaxCap_Ineficiente(Grafo g){
 }
 
 //Travessias de grafos -------------------------------------------------------------------------------------
-
-
 
 
 int breadthFirst(Grafo g, int v, int ant[]){
@@ -267,8 +247,6 @@ int breadthFirst(Grafo g, int v, int ant[]){
 
 	return i;
 }
-
-
 
 
 int succN(Grafo g, int v, int N){
@@ -304,7 +282,6 @@ int succN(Grafo g, int v, int N){
 }
 
 
-
 int depthFirstRec(Grafo g, int v, int ant[], int visitados[]){
 
 	int count = 1;
@@ -337,8 +314,6 @@ int depthFirst(Grafo g, int v, int ant[]){
 }
 
 
-
-
 int procuraRec(Grafo g, int o, int d, int visitados[]){
 
 	int found = 0;
@@ -356,7 +331,6 @@ int procuraRec(Grafo g, int o, int d, int visitados[]){
 }
 
 
-
 int procura(Grafo g, int o, int d){
 
 	int visitados[NV], i;
@@ -365,7 +339,6 @@ int procura(Grafo g, int o, int d){
 
 	return procuraRec(g, o, d, visitados);
 }
-
 
 
 // outras funções utéis ----------------------------------------------------------------------------------------
@@ -386,7 +359,6 @@ int naoAlcancavel(Grafo g, int o){
 }
 
 
-
 int naoAlcancavel2(Grafo g, int o){
 
 	//usando a travessia imperativa breadthFirst
@@ -401,7 +373,6 @@ int naoAlcancavel2(Grafo g, int o){
 	
 	return v;
 }
-
 
 
 int naoAlcancavel3(Grafo g, int o){
@@ -439,6 +410,23 @@ struct aresta* reverseIterative(struct aresta* input){
 }
 */
 
+
+
+int colorOK(Grafo g, int color[]){
+
+	int l;
+	struct aresta *x;
+
+	for (l = 0; l < NV; l++)
+		for (x = g[l]; x; x = x->prox)
+			if (color[l] == color[x->destino]) return 0;
+
+	return 1;
+}
+
+
+
+
 void inverteGrafo(Grafo g){
 
 	GrafoM a, transpose; 
@@ -452,6 +440,7 @@ void inverteGrafo(Grafo g){
 
     matToLista(transpose, g);
 }
+
 
 
 void inverteGrafo2(Grafo g1, Grafo g2){
@@ -498,8 +487,6 @@ void inverteGrafoZE(Grafo g){
 // Caminho mais curto --------------------------------------------------------------------------------
 
 
-
-
 void floydWarshall(Grafo g, int m[NV][NV], int c[NV][NV]){
 
 	int i, o, d;
@@ -524,8 +511,6 @@ void floydWarshall(Grafo g, int m[NV][NV], int c[NV][NV]){
 					if (m[i][d] != INFINITY)
 						if (m[o][d] > m[o][i] + m[i][d]) m[o][d] = m[o][i] + m[i][d];
 }
-
-
 
 
 void imprimeCaminho(int m[NV][NV], int c[NV][NV], int o, int d){
